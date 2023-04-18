@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import Posts
+from .models import Post
 
 
 class PostsSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
-    profile_image = serializers.ReadOnlyFiend(source='owner.profile.image.url')
+    profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
     
     def validate_image(self, value):
         if value.size > 1024 * 1024 * 2:
@@ -28,7 +28,7 @@ class PostsSerializer(serializers.ModelSerializer):
         return request.user == obj.owner
 
     class Meta:
-        model = Posts
+        model = Post
         fields = [
             'id', 'owner', 'is_owner', 'profile_id', 
             'profile_image', 'created_at', 'updated_at', 
